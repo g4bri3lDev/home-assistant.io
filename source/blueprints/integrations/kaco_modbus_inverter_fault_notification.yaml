@@ -1,0 +1,39 @@
+blueprint:
+  name: Notify when a KACO inverter reports a fault
+  description: >
+    Send a notification or run custom actions when your KACO inverter enters a
+    fault state, so a stopped array is noticed the same day rather than at the
+    end of the month.
+  domain: automation
+  author: g4bri3lDev
+  homeassistant:
+    min_version: 2026.10.0
+
+  input:
+    operating_state_sensor:
+      name: Operating state sensor
+      description: The inverter's operating state sensor.
+      selector:
+        entity:
+          filter:
+            - integration: kaco_modbus
+              domain: sensor
+              device_class: enum
+
+    actions:
+      name: Actions
+      description: >
+        The actions to run when the inverter faults (for example, send a
+        notification).
+      default: []
+      selector:
+        action:
+
+mode: single
+
+triggers:
+  - trigger: state
+    entity_id: !input operating_state_sensor
+    to: fault
+
+actions: !input actions

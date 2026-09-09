@@ -20,6 +20,14 @@ The **KACO Modbus** {% term integration %} connects Home Assistant to a
 it is producing. The inverter is read directly over your local network, so no
 cloud account or manufacturer portal is involved.
 
+## Use cases
+
+Reading the inverter directly gives you production figures at the same rate the
+inverter measures them, without waiting on KACO's portal. That makes it possible
+to put solar production on the [Energy dashboard](/docs/energy/), to run
+appliances while there is surplus to use, and to be told the same day when the
+array stops producing.
+
 ## Supported devices
 
 KACO inverters that provide SunSpec over Modbus TCP, which covers the current
@@ -60,6 +68,33 @@ Modbus unit ID:
 
 The **KACO Modbus** {% term integration %} {% term polling polls %} the inverter
 every 30 seconds.
+
+## Examples
+
+### Get told when the inverter faults
+
+A faulted inverter stops producing and does not announce it. This blueprint
+notifies you when the operating state turns to **Fault**.
+
+{% my blueprint_import badge blueprint_url="https://www.home-assistant.io/blueprints/integrations/kaco_modbus_inverter_fault_notification.yaml" %}
+
+## Troubleshooting
+
+### Cannot connect to the inverter
+
+The address is right but setup fails, or the entities go unavailable.
+
+1. Check Modbus TCP is still enabled on the inverter, under its SunSpec or
+   Modbus protocol settings.
+2. Stop anything else polling the inverter over Modbus. It accepts one
+   connection at a time.
+3. Confirm the port and unit ID. Both are on the inverter's Modbus settings
+   page, and a gateway has its own unit ID.
+
+### The device is not a KACO inverter
+
+Another SunSpec inverter answers at that address. Check the IP address, which
+may have changed if the inverter's DHCP lease moved to another device.
 
 ## Known limitations
 
